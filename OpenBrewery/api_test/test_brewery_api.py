@@ -1,5 +1,6 @@
 import pytest
 import requests
+import mockApi_brewery
 
 
 class TestBreweryAPI:
@@ -8,14 +9,16 @@ class TestBreweryAPI:
     def test_get_list_breweries(self, base_url):
         """Check that on response we receive 200 status code and json format"""
 
-        response = requests.get(base_url)
+        # response = requests.get(base_url)
+        response = mockApi_brewery.mock_get_list_breweries()
         assert response.ok
 
     @pytest.mark.parametrize("by_city", ["Birmingham", "Wasilla", "Tucson"])
     def test_get_list_by_city(self, base_url, by_city):
         """Getting Breweries by city"""
 
-        response = requests.get(base_url, params={"by_city": by_city})
+        # response = requests.get(base_url, params={"by_city": by_city})
+        response = mockApi_brewery.mock_get_list_by_city(by_city)
         assert response.ok
         res_json = response.json()
 
@@ -27,7 +30,8 @@ class TestBreweryAPI:
     def test_get_breweries_by_type(self, base_url, by_type):
         """Getting Breweries by type"""
 
-        response = requests.get(base_url, params={"by_type": by_type})
+        # response = requests.get(base_url, params={"by_type": by_type})
+        response = mockApi_brewery.mock_get_breweries_by_type(by_type)
         assert response.ok
 
         res_json = response.json()
@@ -41,7 +45,8 @@ class TestBreweryAPI:
     def test_get_single_brewery(self, base_url, brewery_id):
         """Get Breweries by id"""
 
-        response = requests.get(base_url + f"/{brewery_id}")
+        # response = requests.get(base_url + f"/{brewery_id}")
+        response = mockApi_brewery.mock_get_single_brewery(brewery_id)
         assert response.ok
 
         res_json = response.json()
@@ -51,7 +56,8 @@ class TestBreweryAPI:
     def test_autocomplete_brewery(self, base_url, query):
         """Checking Breweries by autocomplete for maximum number """
 
-        response = requests.get(base_url + "/autocomplete", params={"query": query})
+        # response = requests.get(base_url + "/autocomplete", params={"query": query})
+        response = mockApi_brewery.mock_autocomplete_brewery(query)
         assert response.ok
         res_json = response.json()
         assert len(res_json) <= 15

@@ -1,5 +1,6 @@
 import requests
 import pytest
+import mocking_API
 
 
 class TestBreedAPI:
@@ -9,7 +10,8 @@ class TestBreedAPI:
         """Checking request for getting all breeds"""
 
         url = f"https://dog.ceo/api/breeds/list/all"
-        response = requests.get(url)
+        # response = requests.get(url)
+        response = mocking_API.mock_all_breeds()
         assert response.ok
         assert response.json().get('status') == 'success'
 
@@ -18,7 +20,8 @@ class TestBreedAPI:
         """Checking breeds random images"""
 
         url = base_breed_url + f"{breeds}/images/random"
-        response = request_method(url)
+        # response = request_method(url)
+        response = mocking_API.mock_breed_random_image()
         assert response.ok
         assert response.json().get('status') == 'success'
         assert response.json().get('message').endswith('.jpg')
@@ -28,7 +31,8 @@ class TestBreedAPI:
         """Checking random images and count of images"""
 
         url = base_breed_url + f"{breeds}/images/random/{img_count}"
-        response = request_method(url)
+        response = mocking_API.mock_breed_multiple_random_images(img_count)
+        # response = request_method(url)
         assert response.ok
         assert response.json().get('status') == 'success'
         assert len(response.json().get('message')) == img_count
@@ -39,7 +43,8 @@ class TestBreedAPI:
         """Get random image of dog"""
 
         url = base_url + f"image/random/"
-        response = request_method(url)
+        response = mocking_API.mock_breed_random_image()
+        # response = request_method(url)
         assert response.ok
         assert response.json().get('status') == 'success'
         assert response.json().get('message').endswith('.jpg')
@@ -47,8 +52,10 @@ class TestBreedAPI:
     @pytest.mark.parametrize("dog_output", [["afghan", "basset", "blood", "english", "ibizan", "plott", "walker"]])
     def test_sub_breed(self, base_breed_url, request_method, dog_output):
         """Get all sub-breeds for hound dog"""
+
         url = base_breed_url + f"hound/list"
-        response = request_method(url)
+        response = mocking_API.mock_sub_breed()
+        # response = request_method(url)
         assert response.ok
         assert response.json().get('status') == 'success'
         assert response.json().get('message') == dog_output
