@@ -1,5 +1,6 @@
 import pytest
 import requests
+import mock_api_response
 
 
 class TestJsonPlaceHolder:
@@ -12,7 +13,8 @@ class TestJsonPlaceHolder:
     def test_check_user_name_by_id(self, base_url, userId, userName):
         """Getting users by userId and validating name of user"""
 
-        response = requests.get(base_url + f"users/{userId}")
+        # response = requests.get(base_url + f"users/{userId}")
+        response = mock_api_response.mock_username_by_id(userId, userName)
         assert response.ok
 
         res_json = response.json()
@@ -23,14 +25,17 @@ class TestJsonPlaceHolder:
     def test_get_all_users(self, base_url, userCount):
         """Checking user count from API"""
 
-        response = requests.get(base_url + "users")
+        # response = requests.get(base_url + "users")
+        response = mock_api_response.mock_get_all_users()
         assert response.ok
         assert len(response.json()) == userCount
 
     @pytest.mark.parametrize("comment", [500])
     def test_get_all_comments(self, base_url, comment):
         """Checking 500 comments on the page"""
-        response = requests.get(base_url + "comments")
+
+        # response = requests.get(base_url + "comments")
+        response = mock_api_response.mock_get_all_comments()
         assert response.ok
         assert len(response.json()) == comment
 
@@ -40,7 +45,9 @@ class TestJsonPlaceHolder:
     ]])
     def test_get_comment_emails(self, base_url, emails):
         """Checking emails from posts id=2"""
-        response = requests.get(base_url + "posts/2/comments/")
+
+        # response = requests.get(base_url + "posts/2/comments/")
+        response = mock_api_response.mock_get_comment_email()
         assert response.ok
         res_json = response.json()
         compare_email = []
@@ -52,8 +59,10 @@ class TestJsonPlaceHolder:
 
     @pytest.mark.parametrize("Id, index", [(1, 0), (2, 1), (3, 2), (4, 3), (5, 4), (6, 5)])
     def test_api_todos(self, base_url, Id, index):
-        response = requests.get(
-            base_url + "todos/"
-        ).json()
+        # response = requests.get(
+        #     base_url + "todos/"
+        # ).json()
+
+        response = mock_api_response.mock_api_todos().json()
         assert len(response) > 0
         assert response[index]['id'] == Id
